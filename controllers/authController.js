@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/user.model");
 const generateToken = require("../utils/generateToken");
 
-function registerUser(req, res) {
+async function registerUser(req, res) {
   try {
     const { name, email, phone, password } = req.body;
 
@@ -28,5 +28,36 @@ function registerUser(req, res) {
   }
 }
 
+async function loginUser(req, res) {
+  try {
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      // res.redirect('/login')
+      res.send("Login Fail");
+    }
+
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (result) {
+        const token = generateToken({ email, id: user._id });
+        res.cookie("token", token);
+        // res.redirect('')
+        res.send("Login Success");
+      } else {
+        res.send("Login Fail");
+      }
+    });
+  } catch (error) {
+    res.status(500);
+    console.error(error.message);
+  }
+}
+
+function logoutUser(req, res) {
+  res.cookie("token", "");
+  res.send("Logged Out");
+}
 module.exports.registerUser = registerUser;
 module.exports.loginUser = loginUser;
+module.exports.logoutUser = logoutUser;
