@@ -20,10 +20,6 @@ function registerUser(req, res) {
           res.cookie("token", token);
         }
         res.status(201).send(user);
-
-        if (err) {
-          throw new Error(err);
-        }
       });
     });
   } catch (error) {
@@ -33,3 +29,4 @@ function registerUser(req, res) {
 }
 
 module.exports.registerUser = registerUser;
+module.exports.loginUser = loginUser;
