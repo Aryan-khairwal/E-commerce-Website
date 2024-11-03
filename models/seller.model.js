@@ -1,28 +1,26 @@
-cont mongoose = required('mongoose')
+const mongoose = require("mongoose")
 
 const sellerSchema = mongoose.Schema({
-  name:{
-    type:String,
-    default:'User',
-    trim:true
+  name: {
+    type: String,
   },
-  
-  email:{
-    type:String,
-    unique:true,
+
+  email: {
+    type: String,
+    unique: true,
   },
-  phone:{
-    type:Number,
-    minLength:10
+  password: String,
+  phone: {
+    type: Number,
+    minLength: 10,
   },
 
   products: {
-    type:Array,
-    default:[]
+    type: Array,
+    default: [],
   },
-  gstin:String,
-  picture:String
-
+  gstin: String,
+  picture: String,
 })
 
-module.exports = mongoose.model('user',sellerSchema)
+module.exports = mongoose.model("seller", sellerSchema)

@@ -1,25 +1,27 @@
-const express = require("express");
-const app = express();
+const express = require("express")
+const app = express()
 
-const cookieParser = require("cookie-parser");
-const path = require("path");
-const db = require("./config/mongoose-connection");
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config()
+const cookieParser = require("cookie-parser")
+const path = require("path")
+const connectDB = require("./config/mongoose-connection")
 
-const productsRouter = require("./routes/productsRouter");
-const usersRouter = require("./routes/usersRouter");
-const sellersRouter = require("./routes/sellersRouter");
+const indexRouter = require("./routes/indexRouter")
+const usersRouter = require("./routes/usersRouter")
+const productsRouter = require("./routes/productsRouter")
+const sellersRouter = require("./routes/sellersRouter")
 
-dotenv.config();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
-app.use(cookieParser());
+connectDB()
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(express.static(path.join(__dirname, "public")))
+app.use(cookieParser())
 
-app.set("view engine", "ejs");
+app.set("view engine", "ejs")
 
-app.use("/users", usersRouter);
-app.use("/products", productsRouter);
-app.use("/seller", sellersRouter);
+app.use("/", indexRouter)
+app.use("/users", usersRouter)
+app.use("/products", productsRouter)
+app.use("/seller", sellersRouter)
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT)
