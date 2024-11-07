@@ -15,10 +15,15 @@ router.get("/shop", isLoggedIn, async (req, res) => {
 })
 
 router.get("/addToCart/:id", isLoggedIn, addToCart)
+
 router.get("/cart", isLoggedIn, async (req, res) => {
   const user = await userModel
     .findOne({ email: req.user.email })
     .populate("cart")
   res.render("cart", { user })
+})
+
+router.get("/cart/placeOrder", (req, res) => {
+  res.send("Order Placed, Thank You!")
 })
 module.exports = router

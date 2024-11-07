@@ -11,7 +11,7 @@
             <button onclick=""><a class="text-red-500" href="/products/deleteAll">Delete all</a></button>
             <div class="flex items-start gap-5 flex-wrap">
                 <% products.forEach(function(product){ %>
-                    <div class="w-52">
+                    <div class="w-52 mb-5">
                         <div>
                             <img class="h-full" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
                                 alt="product-image">
@@ -25,8 +25,13 @@
                                 <h4>₹ <%= product.price %>
                                 </h4>
                             </div>
-                            <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white" href="">
-                                <i class="ri-add-line"></i>
+                            <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white"
+                                href="/products/delete/<%= product._id %>">
+                                <i class="ri-delete-bin-line"></i>
+                            </a>
+                            <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white"
+                                href="/products/edit/<%= product._id %>">
+                                <i class="ri-pencil-line"></i>
                             </a>
                         </div>
                     </div>

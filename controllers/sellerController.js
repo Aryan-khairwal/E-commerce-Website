@@ -1,6 +1,7 @@
 const sellerModel = require("../models/seller.model")
 const productModel = require("../models/product.model")
 const bcrypt = require("bcrypt")
+const generateToken = require("../utils/generateToken")
 
 const registerSeller = async function (req, res) {
   const { name, email, password, phone, gstin } = req.body
@@ -25,18 +26,22 @@ const loginSeller = async function (req, res) {
 
   const seller = await sellerModel.findOne({ email })
 
-  if (!seller) res.send("Something is wrong")
+  if (!seller) res.redirect("/login")
+  else {
+    bcrypt.compare(password, seller.password, (err, result) => {
+      if (result) {
+        const token = generateToken({
+          email: seller.email,
+          phone: seller.phone,
+          gstin: seller.gstin,
+        })
 
-  bcrypt.compare(password, seller.password, (err, result) => {
-    if (result) res.redirect("/seller/dashboard")
-    else res.send("Login Failed")
-  })
+        res.cookie("adminToken", token)
+        res.redirect("/seller")
+      } else res.redirect("seller/login")
+    })
+  }
 }
 
-const adminPage = async function (req, res) {
-  const products = await productModel.find()
-  res.render("admin", { products })
-}
 module.exports.registerSeller = registerSeller
 module.exports.loginSeller = loginSeller
-module.exports.adminPage = adminPage
